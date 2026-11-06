@@ -6,7 +6,7 @@ It is a single HTML file with no build step and no server. Everything runs local
 
 <img width="1912" height="947" alt="Screenshot 2026-11-06 164010" src="https://github.com/user-attachments/assets/699ea616-19ef-430a-95ac-d594e13f8d2f" />
 
-<img width="1915" height="949" alt="Screenshot 2026-11-06 170155" src="https://github.com/user-attachments/assets/a5851647-3cd5-48dc-be20-a7b812873df0" />
+<img width="1913" height="947" alt="Screenshot 2026-11-06 164149" src="https://github.com/user-attachments/assets/cea19ae7-d073-493b-ab92-200aa24ba941" />
 
 ---
 
