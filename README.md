@@ -49,8 +49,6 @@ It is a single HTML file with no build step and no server. Everything runs local
 4. Edit on the nodes or in the side panel.
 5. Click **Copy** to copy the result, or **Save** to download it.
 
-> The model viewer loads three.js and its FBX loader from a CDN the first time you open it, so that part needs an internet connection.
-
 ### Controls
 
 | Action | How |
@@ -90,8 +88,7 @@ The parser understands:
 
 ## Privacy
 
-Everything happens in your browser. Files are read locally and nothing is sent to a server. The only network requests are to download the 3D libraries for the model viewer.
-
+Everything happens in your browser. Files are read locally and nothing is sent to a server.
 ---
 
 ## Built with
