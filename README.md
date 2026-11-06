@@ -6,6 +6,8 @@ It is a single HTML file with no build step and no server. Everything runs local
 
 <img width="1912" height="947" alt="Screenshot 2026-11-06 164010" src="https://github.com/user-attachments/assets/699ea616-19ef-430a-95ac-d594e13f8d2f" />
 
+<img width="1915" height="949" alt="Screenshot 2026-11-06 170155" src="https://github.com/user-attachments/assets/a5851647-3cd5-48dc-be20-a7b812873df0" />
+
 ---
 
 ## Features
@@ -105,5 +107,4 @@ Bug reports and pull requests are welcome. If a config file won't parse or round
 
 ## License
 
-Add your license here (for example MIT).
-<img width="1913" height="947" alt="Screenshot 2026-11-06 164149" src="https://github.com/user-attachments/assets/b19d6c87-404b-4eec-8725-89f00872d052" />
+CC0-1.0 license.
