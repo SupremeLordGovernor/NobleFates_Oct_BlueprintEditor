@@ -89,6 +89,7 @@ The parser understands:
 ## Privacy
 
 Everything happens in your browser. Files are read locally and nothing is sent to a server.
+
 ---
 
 ## Built with
