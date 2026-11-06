@@ -105,4 +105,5 @@ Bug reports and pull requests are welcome. If a config file won't parse or round
 
 ## License
 
-Add your license here (for example MIT).<img width="1912" height="947" alt="Screenshot 2026-11-06 164010" src="https://github.com/user-attachments/assets/bb5b07aa-a1de-4846-9674-fc35e62f941d" />
+Add your license here (for example MIT).
+<img width="1913" height="947" alt="Screenshot 2026-11-06 164149" src="https://github.com/user-attachments/assets/b19d6c87-404b-4eec-8725-89f00872d052" />
