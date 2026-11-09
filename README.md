@@ -4,9 +4,7 @@ A browser-based, node-graph editor for **Oct-style game config files**: the brac
 
 It is a single HTML file with no build step and no server. Everything runs locally in your browser, and your files are never uploaded.
 
-<img width="1912" height="947" alt="Screenshot 2026-11-06 164010" src="https://github.com/user-attachments/assets/699ea616-19ef-430a-95ac-d594e13f8d2f" />
-
-<img width="1913" height="947" alt="Screenshot 2026-11-06 164149" src="https://github.com/user-attachments/assets/cea19ae7-d073-493b-ab92-200aa24ba941" />
+<img width="1907" height="945" alt="Screenshot 2026-11-09 162635" src="https://github.com/user-attachments/assets/5d4ac1e8-2110-4b57-9d07-65f870682485" />
 
 ---
 
