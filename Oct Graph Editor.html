@@ -45,11 +45,21 @@ path.hit{fill:none;stroke:transparent;stroke-width:12;pointer-events:stroke;curs
 .tg{width:12px;flex:none;text-align:center;color:#aaa;cursor:pointer}
 .tp{position:absolute;left:6px;top:5px;width:12px;height:12px;box-sizing:border-box;border:2px solid var(--c);border-radius:50%;background:var(--c)}
 .ab{font-size:10px;padding:0 7px;background:#2a2a2a;color:#bbb;border-color:#000}
+.tree.lk .rx,.tree.lk .ab{display:none}
+.tree.lk .rk{display:none}.tr.rl .rx,.tr.rl .ab{display:none}.tr.rl input:not(.cm),.tr.rl textarea{opacity:.7;cursor:default}
+.rk{order:8;flex:none;width:16px;height:16px;padding:0;border:0;background:none;font-size:10px;line-height:16px;cursor:pointer;opacity:.55}.rk:hover{opacity:1}.tr .rx{order:9}.tree.lk input:not(.cm),.tree.lk textarea{opacity:.75;cursor:default}
 #mv{position:fixed;inset:0;z-index:45;background:var(--bg);display:none;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
 #mvh{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:8px 10px;border-bottom:1px solid var(--bd)}
 #mvb{flex:1;display:flex;min-height:0}#mvl{width:290px;overflow:auto;border-right:1px solid var(--bd)}
 .mi{padding:6px 10px;cursor:pointer;border-bottom:1px solid var(--bd)}.mi small{display:block;color:var(--mu);font-size:10px;word-break:break-all}.mi.on{background:var(--card)}
 .lb{font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--bd);border-radius:6px;padding:3px 8px;cursor:pointer}.lb:hover{border-color:var(--ac)}
+#sv{position:fixed;inset:0;background:var(--bg);z-index:40;display:none;flex-direction:column;gap:8px;padding:12px;padding-top:calc(12px + env(safe-area-inset-top,0px));overflow:auto}
+.si{border:1px solid var(--bd);border-radius:8px;background:var(--card);padding:8px 10px;display:flex;gap:8px;align-items:flex-start;margin-top:8px}
+.si pre{margin:4px 0 0;font:11px ui-monospace,Menlo,monospace;color:var(--mu);max-height:5.5em;overflow:hidden;white-space:pre-wrap;word-break:break-all}
+.sc{margin-top:12px;font-size:13px;font-weight:600;cursor:pointer;user-select:none}.sc:hover{color:var(--ac)}
+.scb{margin-left:8px;font-size:11px;font-weight:400;padding:0 7px}
+#cf{position:fixed;inset:0;background:#0008;z-index:60;display:none;align-items:center;justify-content:center;padding:16px}
+#cfb{background:var(--bg);color:var(--fg);border:1px solid var(--bd);border-radius:10px;padding:16px;max-width:420px;box-shadow:0 10px 30px #000a}
 .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}.dot.ok{background:#4c4}.dot.ap{background:#ec4}.dot.no{background:#d54}
 #mvc{flex:1;position:relative;min-width:0;background:#1a1a1a}#mvc canvas{display:block;width:100%;height:100%}
 #mvi{position:absolute;left:10px;bottom:10px;color:#ddd;font-size:12px;background:#000a;padding:4px 8px;border-radius:6px;max-width:80%}
@@ -60,8 +70,9 @@ path.hit{fill:none;stroke:transparent;stroke-width:12;pointer-events:stroke;curs
 .pin.ex{background:#fff;opacity:.45;clip-path:polygon(0 0,60% 0,100% 50%,60% 100%,0 100%)}.pin.ex.on{opacity:1}
 .pin.rin{--c:#8bd;border:2px solid var(--c);border-radius:50%;cursor:default}.pin.rin.on{background:var(--c)}
 .pin:hover{filter:brightness(1.6)}
-#cm{position:fixed;z-index:50;display:none;background:#1b1b1b;border:1px solid #000;border-radius:6px;box-shadow:0 8px 20px #000a;color:#ddd;min-width:170px;padding:4px 0}
+#cm{position:fixed;z-index:50;display:none;background:#1b1b1b;border:1px solid #000;border-radius:6px;box-shadow:0 8px 20px #000a;color:#ddd;min-width:230px;max-height:70vh;overflow:auto;padding:4px 0}
 .ct{padding:4px 12px;font-size:11px;color:#888;text-transform:uppercase}.ci{padding:5px 12px;cursor:pointer}.ci:hover{background:#2f5fa8}
+.ct.cg{cursor:pointer;color:#bbb;text-transform:none;font-size:12px;font-weight:600;user-select:none}.ct.cg:hover{color:#fff}
 #side{width:340px;border-left:1px solid var(--bd);background:var(--bg);padding:10px;overflow:auto;box-sizing:border-box}
 #side label{display:block;color:var(--mu);margin:10px 0 3px;font-size:12px}
 #side input,#side textarea{width:100%;box-sizing:border-box;font-family:ui-monospace,Menlo,monospace;font-size:12px}
@@ -77,23 +88,25 @@ path.hit{fill:none;stroke:transparent;stroke-width:12;pointer-events:stroke;curs
 <h1>Oct Blueprint Editor</h1>
 <button id="open">Open…</button><input id="file" type="file" hidden>
 <button id="src">Source / import</button>
-<select id="tpl"><option value="">+ New node…</option></select>
+<button id="tpl">+ New node…</button>
 <button id="fit">Fit view</button><button id="lay">Auto layout</button>
 <label class="ck"><input type="checkbox" id="ckR" checked>references</label>
 <label class="ck"><input type="checkbox" id="ckN">nested objects</label>
 <label class="ck"><input type="checkbox" id="ckO" checked>no overlap</label>
-<button id="mvOpen">Model viewer</button><button id="copy">Copy</button><button id="save">Save</button><button id="sample">Sample</button>
-<span id="status"></span>
+<input id="svCat" list="svCats" placeholder="Category or Category/Sub" size="20" title="Category for the nodes you save next"><datalist id="svCats"></datalist><button id="svSave" title="Add the selected node(s) to your saved nodes. Shift-click to select several nodes.">Save nodes</button><button id="svOpen" title="Choose a node from your saved nodes">Saved nodes…</button><button id="mvOpen">Model viewer</button><button id="save">Save</button>
+<select id="theme" title="Color theme"><option value="auto">Theme: Auto</option><option value="dark">Theme: Dark</option><option value="light">Theme: Light</option></select><span id="status"></span>
 </header>
 <div id="wrap">
-<div id="vp"><div id="world"><svg class="ov" id="edges"></svg><svg class="ov"><path id="tmp"/></svg><div id="nodes"></div></div><div id="empty">Open a file or load the sample to see the graph.</div></div>
+<div id="vp"><div id="world"><svg class="ov" id="edges"></svg><svg class="ov"><path id="tmp"/></svg><div id="nodes"></div></div><div id="empty">Open a file to see the graph.</div></div>
 <aside id="side"></aside>
 </div>
+<div id="cf"><div id="cfb"><p id="cft" style="margin:0 0 10px"></p><label class="ck" style="margin-bottom:10px"><input type="checkbox" id="cfAll">Apply to all remaining nodes</label><div class="btns" style="margin:0"><button id="cfO">Overwrite</button><button id="cfN">Save as new</button><button id="cfS">Skip</button></div></div></div>
+<div id="sv"><div class="btns" style="align-items:center"><b>Saved nodes</b><label class="lb" for="svF">Load SaveNodes.html…</label><input id="svF" type="file" accept=".html,.htm" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none"><button id="svDl">Download SaveNodes.html</button><button id="svCp">Copy file text</button><button id="svEx">Expand all</button><button id="svCo">Collapse all</button><span id="svSt" class="legend" style="margin:0"></span><button id="svX" style="margin-left:auto">Close</button></div><div id="svl"></div></div>
 <div id="mv"><div id="mvh"><b>Model viewer</b><button id="mvRoot" title="Choose the folder so the viewer can read the files">Browse…</button><input id="mvDir" type="file" webkitdirectory multiple style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none"><select id="mvScope"><option value="sel">Selected node</option><option value="all">Whole document</option></select><select id="mvTex"><option value="auto">Texture: auto</option></select><button id="mvRef">Refresh</button><span id="mvSt" class="legend"></span><button id="mvX" style="margin-left:auto">Close</button></div><div id="mvb"><div id="mvl"></div><div id="mvc"><div id="mvi">Pick a model on the left. Click Browse… and choose your game folder so the files can be found.</div></div></div></div>
 <div id="srcp"><div class="btns"><button id="sApply">Apply as graph</button><button id="sClose">Close</button></div><textarea id="sta" spellcheck="false"></textarea></div>
 <script>
 (()=>{
-let uid=0,roots=[],nodes=[],byKey=new Map(),objKey=new Map(),edges=[],pos=new Map(),elOf=new Map(),sel=null,selE=null,fname='config.txt';
+let uid=0,roots=[],nodes=[],byKey=new Map(),objKey=new Map(),edges=[],pos=new Map(),elOf=new Map(),sel=null,selE=null,fname='config.txt';const multi=new Set();
 let tx=40,ty=40,sc=1;const W=260,H=76,PX=12,Y1=40,Y2=60;
 const $=s=>document.querySelector(s);
 const h=(t,p,...c)=>{const e=document.createElement(t);for(const k in p||{}){if(k==='class')e.className=p[k];else if(k.startsWith('on'))e.addEventListener(k.slice(2),p[k]);else e[k]=p[k]}for(const x of c.flat())if(x!=null)e.append(x.nodeType?x:document.createTextNode(x));return e};
@@ -249,21 +262,41 @@ function autoW(t){
   else t.style.width=Math.max(t.classList.contains('ik')?8:10,t.value.length+2)+'ch';
 }
 function measure(n){const el=elOf.get(n.key);if(!el)return;el.querySelectorAll('.tr input,.tr textarea').forEach(autoW);n.anch=new Map();const r0=el.getBoundingClientRect();el.querySelectorAll('[data-m]').forEach(r=>{const b=r.getBoundingClientRect();n.anch.set(+r.dataset.m,(b.top+b.height/2-r0.top)/sc)})}
+const LK=new Set(),LR=new Set();
+let LOCKS={};try{LOCKS=JSON.parse(localStorage.getItem('octLocks')||'{}')||{}}catch(_){}
+const saveLocks=()=>{try{localStorage.setItem('octLocks',JSON.stringify(LOCKS))}catch(_){}};
+function pathMap(o){
+  const m=new Map(),r=new Map();
+  (function w(x,p){
+    if(x.k==='o'){const cnt={};for(const e of x.e){if(e.k!=='kv')continue;const c=cnt[e.key]=(cnt[e.key]||0)+1,pp=p+'/'+e.key+'#'+(c-1);m.set(e.id,pp);r.set(pp,e.id);if(e.v&&e.v.k!=='r')w(e.v,pp)}}
+    else if(x.k==='a')x.e.forEach((it,i)=>{const pp=p+'/['+i+']';if(it.k==='r'||it.k==='o'){m.set(it.id,pp);r.set(pp,it.id)}if(it.k==='o')w(it,pp)});
+  })(o,'');
+  return{m,r};
+}
+function syncLocks(n){const{m}=pathMap(n.obj),ps=[];LR.forEach(id=>{if(m.has(id))ps.push(m.get(id))});if(ps.length)LOCKS[n.id]=ps;else delete LOCKS[n.id];saveLocks()}
+function restoreLocks(n){const ps=LOCKS[n.id];if(!ps)return;const{r}=pathMap(n.obj);ps.forEach(p=>{if(r.has(p))LR.add(r.get(p))})}
 function treeBox(n){
-  n.ed=edges.filter(e=>e.a===n.key&&e.kind!=='inherit');
+  restoreLocks(n);n.ed=edges.filter(e=>e.a===n.key&&e.kind!=='inherit');
   const box=h('div',{class:'tree'});
-  const rf=()=>{box.replaceChildren(...tRows(n,n.obj,0,rf));measure(n);separate();drawEdges();if(sel===n.key)inspect()};
-  box.replaceChildren(...tRows(n,n.obj,0,rf));
+  const lock=()=>{const L=LK.has(n.key);box.classList.toggle('lk',L);let ld=-1;box.querySelectorAll('.tr').forEach(r=>{
+    const d=Math.round(((parseInt(r.style.paddingLeft)||24)-24)/14),id=r.dataset.m?+r.dataset.m:null;
+    if(ld>=0&&d<=ld)ld=-1;const inside=ld>=0,own=id!=null&&LR.has(id);if(own&&!inside)ld=d;const rl=inside||own;
+    r.classList.toggle('rl',rl);r.querySelectorAll('input,textarea').forEach(i=>{i.readOnly=L||rl});
+    const kb=r.querySelector(':scope>.rk');if(kb){kb.textContent=own?'\ud83d\udd12':'\ud83d\udd13';kb.title=own?'Row locked \u2014 click to unlock this variable and its value':'Lock this variable and its value'}
+  });if(n.lb){n.lb.textContent=L?'\ud83d\udd12':'\ud83d\udd13';n.lb.title=L?'Locked \u2014 click to allow editing':'Unlocked \u2014 click to lock editing'}};
+  n.lock=lock;
+  const rf=()=>{box.replaceChildren(...tRows(n,n.obj,0,rf));lock();measure(n);separate();drawEdges();if(sel===n.key)inspect()};
+  box.replaceChildren(...tRows(n,n.obj,0,rf));lock();
   return[box];
 }
 function tRows(n,o,d,rf){
   const out=[],pad=24+d*14,showN=$('#ckN').checked;
-  const row=(mid,...c)=>{const r=h('div',{class:'tr',style:'padding-left:'+pad+'px'},c);if(mid!=null)r.dataset.m=mid;return r};
+  const row=(mid,...c)=>{const r=h('div',{class:'tr',style:'padding-left:'+pad+'px'},c);if(mid!=null){r.dataset.m=mid;r.append(h('button',{class:'rk',onclick:()=>{LR.has(mid)?LR.delete(mid):LR.add(mid);n.lock();syncLocks(n)}}))}return r};
   const pin=(mid,leaf)=>{if(!leaf)return null;const ed=n.ed.find(e=>e.ch.includes(mid));return ed?h('span',{class:'tp',style:'--c:hsl('+hue(gv(byKey.get(ed.b).obj,'type'))+' 70% 62%)'}):null};
   const x=it=>h('button',{class:'rx',title:'Remove',onclick:()=>{o.e.splice(o.e.indexOf(it),1);rf()}},'\u00d7');
   const tg=v=>h('span',{class:'tg',onclick:()=>{openT.has(v.id)?openT.delete(v.id):openT.add(v.id);rf()}},openT.has(v.id)?'\u25be':'\u25b8');
   const refIn=(v,rb)=>{let prev=v.t;return h('input',{class:'iv',value:v.t,spellcheck:false,oninput:z=>{v.t=z.target.value},onchange:()=>{const was=isRef(prev);prev=v.t;
-    if(rb){if(rb==='id'&&v.t!==n.key)pos.set(v.t,pos.get(n.key));rebuild(rb==='id'?v.t:n.key)}else if(was||isRef(v.t))rebuild(n.key);else if(sel===n.key)inspect()}})};
+    if(rb){if(rb==='id'&&v.t!==n.key){pos.set(v.t,pos.get(n.key));if(LOCKS[n.key]){LOCKS[v.t]=LOCKS[n.key];delete LOCKS[n.key];saveLocks()}}rebuild(rb==='id'?v.t:n.key)}else if(was||isRef(v.t))rebuild(n.key);else if(sel===n.key)inspect()}})};
   const keyIn=e=>h('input',{class:'ik',value:e.key,spellcheck:false,oninput:z=>{e.key=z.target.value},onchange:()=>{if(sel===n.key)inspect()}});
   const sum=v=>h('span',{class:'sm'},v.k==='a'?'['+v.e.length+']':(v.sel?v.sel+' ':'')+'{'+(gv(v,'id')||gv(v,'name')||gv(v,'type')||'\u2026')+'}');
   const sub=(mid,v,head,del)=>{
@@ -305,7 +338,7 @@ function renderNodes(){
   for(const n of nodes){
     const p=pos.get(n.key),t=gv(n.obj,'type'),nm=gv(n.obj,'name');
     const hu=hue(t);
-    const el=h('div',{class:'node'+(sel===n.key?' sel':''),title:n.id},
+    const el=h('div',{class:'node'+(sel===n.key||multi.has(n.key)?' sel':''),title:n.id},
       h('div',{class:'hd',style:'background:linear-gradient(90deg,hsl('+hu+' 55% 34%),hsl('+hu+' 40% 17%))'},h('b',{},n.id.split('.').slice(-2).join('.')),h('i',{},(t||'(no type)')+(n.obj.e.some(e=>e.key==='abstract')?' · abstract':'')+(nm?' · '+nm:''))),
       h('div',{class:'pr'},h('span',{},h('span',{class:'pin in ex'+(cin.has(n.key)?' on':''),title:'Drag onto a node to inherit from it'}),'Inherit'),h('span',{},'Self',h('span',{class:'pin out ex'+(cout.has(n.key)?' on':''),title:'Drag onto a node to make it inherit from this one'}))),
       ...treeBox(n));
@@ -331,7 +364,7 @@ function rebuild(keep){
   build();layout();if(keep&&!byKey.has(keep))keep=null;sel=keep||null;selE=null;
   renderNodes();separate();drawEdges();inspect();
 }
-function select(k){sel=k;selE=null;if(MV.open)setTimeout(mvList,0);elOf.forEach((el,key)=>el.classList.toggle('sel',key===k));drawEdges();inspect()}
+function select(k){sel=k;selE=null;multi.clear();if(MV.open)setTimeout(mvList,0);elOf.forEach((el,key)=>el.classList.toggle('sel',key===k));drawEdges();inspect()}
 
 /* inspector */
 function inspect(){
@@ -350,7 +383,7 @@ function inspect(){
     h('div',{class:'btns'},h('button',{onclick:()=>{
       const nn=rn.value.trim(),old=n.id;if(!nn||nn===old)return;
       (function r(x){if(x.k==='r'){if(x.t===old)x.t=nn;else if(x.t==='<'+old+'>')x.t='<'+nn+'>'}else if(x.k==='o')x.e.forEach(e=>e.v&&r(e.v));else if(x.k==='a')x.e.forEach(r)})({k:'o',e:roots.map(o=>({v:o}))});
-      pos.set(nn,pos.get(old));rebuild(nn)}},'Rename + update references')),
+      pos.set(nn,pos.get(old));if(LOCKS[old]){LOCKS[nn]=LOCKS[old];delete LOCKS[old];saveLocks()}rebuild(nn)}},'Rename + update references')),
     h('label',{},'Source (any property, nested or not)'),ta,
     h('div',{class:'btns'},
       h('button',{onclick:()=>{const r=parse(ta.value).find(x=>x.k==='o');if(!r){$('#status').textContent='Could not parse that source';return}
@@ -375,9 +408,11 @@ vp.addEventListener('pointerdown',e=>{
   if(e.target.closest('input,button,textarea,.tg')){const n0=e.target.closest('.node');if(n0&&sel!==n0.__n.key)select(n0.__n.key);return}
   const pin=e.target.closest('.pin.in,.pin.out'),nd=e.target.closest('.node'),hit=e.target.closest('.hit');
   if(pin&&nd){wire={n:nd.__n,out:pin.classList.contains('out')};e.preventDefault();return}
-  if(nd){const k=nd.__n.key,p=pos.get(k);select(k);drag={k,sx:e.clientX,sy:e.clientY,ox:p.x,oy:p.y};return}
+  if(nd){const k=nd.__n.key,p=pos.get(k);
+    if(e.shiftKey||e.ctrlKey||e.metaKey){if(sel&&!multi.size)multi.add(sel);multi.has(k)?multi.delete(k):multi.add(k);sel=k;selE=null;elOf.forEach((el,key)=>el.classList.toggle('sel',multi.has(key)));drawEdges();inspect();return}
+    if(!(multi.has(k)&&multi.size>1))select(k);drag={k,sx:e.clientX,sy:e.clientY,ox:p.x,oy:p.y};return}
   if(hit){selE=hit.__e;drawEdges();inspect();return}
-  pan={sx:e.clientX,sy:e.clientY,ox:tx,oy:ty};if(sel||selE)select(null);
+  pan={sx:e.clientX,sy:e.clientY,ox:tx,oy:ty};if(sel||selE||multi.size)select(null);
 });
 addEventListener('pointermove',e=>{
   if(drag){const p=pos.get(drag.k);p.x=drag.ox+(e.clientX-drag.sx)/sc;p.y=drag.oy+(e.clientY-drag.sy)/sc;separate(drag.k);const el=elOf.get(drag.k);el.style.left=p.x+'px';el.style.top=p.y+'px';sched()}
@@ -409,14 +444,17 @@ const TPL={
  'Instance color':'{\n    id Oct.Characters.Humanoids.NewRace.Colors.Skin\n    type InstanceCosmeticMaterialColor\n    from = color(0, 0, 0)\n    to = color(1, 1, 1)\n    materials =\n    [\n        Skin\n    ]\n    inheritSkin = 1\n}',
  'Material':'{\n    id Oct.Characters.Humanoids.NewRace.Materials.Skin\n    type Material\n    _VertColorMultiply = 1\n}'
 };
-for(const k in TPL)$('#tpl').append(h('option',{value:k},k));
 function addTpl(k,p0){
-  const o=parse(TPL[k])[0],ie=o.e.find(x=>x.key==='id');let id=ie.v.t,c=1;while(byKey.has(id))id=ie.v.t+(++c);ie.v.t=id;
+  const o=parse(k.startsWith('s:')?((SAVED.find(s=>sk(s)===k.slice(2))||{}).code||''):TPL[k])[0],ie=o.e.find(x=>x.key==='id');let id=ie.v.t,c=1;while(byKey.has(id))id=ie.v.t+(++c);ie.v.t=id;
+  if(k.startsWith('s:')){const sv=SAVED.find(s=>sk(s)===k.slice(2));if(sv&&sv.locks&&sv.locks.length){LOCKS[id]=sv.locks.slice();saveLocks()}}
   const r=vp.getBoundingClientRect(),p=p0||w2(r.left+r.width/2-W/2,r.top+r.height/2-H/2);
   pos.set(id,{x:p.x,y:p.y});roots.push(o);rebuild(id);
 }
-$('#tpl').onchange=e=>{const k=e.target.value;e.target.value='';if(k)addTpl(k)};
+$('#tpl').onclick=e=>{const r=e.currentTarget.getBoundingClientRect();const w=nd=>{for(const c of nd.k.values()){NMC.add('s:'+c.p);w(c)}};w(svTree());renderNodeMenu(null);cm.style.left=r.left+'px';cm.style.top=(r.bottom+4)+'px';cm.style.display='block'};
 function load(text,name){if(name)fname=name;roots=parse(text);pos.clear();rebuild(null);requestAnimationFrame(fit)}
+const applyTheme=v=>{if(v==='dark'||v==='light')document.documentElement.dataset.theme=v;else document.documentElement.removeAttribute('data-theme')};
+try{const t0=localStorage.getItem('octTheme');if(t0){$('#theme').value=t0;applyTheme(t0)}}catch(_){}
+$('#theme').onchange=e=>{applyTheme(e.target.value);try{localStorage.setItem('octTheme',e.target.value)}catch(_){}};
 $('#ckR').onchange=drawEdges;
 $('#ckO').onchange=()=>{separate();drawEdges()};
 $('#ckN').onchange=()=>{pos.clear();rebuild(sel);fit()};
@@ -429,21 +467,7 @@ addEventListener('drop',async e=>{e.preventDefault();const f=e.dataTransfer.file
 $('#src').onclick=()=>{$('#sta').value=serAll();$('#srcp').style.display='flex'};
 $('#sClose').onclick=()=>$('#srcp').style.display='none';
 $('#sApply').onclick=()=>{load($('#sta').value);$('#srcp').style.display='none'};
-$('#copy').onclick=async()=>{
-  const t=serAll(),b=$('#copy');
-  try{await navigator.clipboard.writeText(t)}catch(_){$('#sta').value=t;$('#srcp').style.display='flex';$('#sta').select();document.execCommand('copy')}
-  b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1200);
-};
-$('#save').onclick=()=>{
-  const a=h('a',{href:URL.createObjectURL(new Blob([serAll()],{type:'text/plain'})),download:fname});
-  document.body.append(a);a.click();a.remove();$('#sta').value=serAll();$('#srcp').style.display='flex';
-};
-$('#sample').onclick=()=>load([
-'{\n    id Oct.Chars.Base\n    type CharacterType\n    abstract\n    name = Base Folk\n    skin = <Oct.Chars.Colors.Skin>\n}',
-'{\n    id Oct.Chars.Elf\n    type CharacterType\n    inherit Oct.Chars.Base\n    name = Elf\n    hair = <Oct.Chars.Colors.Hair>\n    variants =\n    [\n        {\n            id Oct.Chars.Elf.Male\n            type CharacterTypeVariant\n            names =\n            [\n                Aegnor\n                Beren\n            ]\n        }\n    ]\n}',
-'{\n    id Oct.Chars.HighElf\n    type CharacterType\n    inherit Oct.Chars.Elf\n    name = High Elf\n    skin = <Oct.Chars.Colors.Skin>\n}',
-'{\n    id Oct.Chars.Colors.Skin\n    type InstanceCosmeticMaterialColor\n    from = color(.2, .2, .1)\n    to = color(.8, .6, .4)\n}',
-'{\n    id Oct.Chars.Colors.Hair\n    type InstanceCosmeticMaterialColor\n    from = color(0, 0, 0)\n    to = color(1, 1, 1)\n}'].join('\n'),'sample.txt');
+$('#save').onclick=async()=>{const r=await saveFile(fname,serAll());if(r!=='saved'){$('#sta').value=serAll();$('#srcp').style.display='flex'}};
 /* ---- model viewer ---- */
 const MV={files:new Map(),root:'',n:0,list:[],cur:null,open:false,lib:false,tc:new Map(),ids:new Map(),t:null};
 const norm=s=>s.replace(/[\u005c]/g,'/').replace(/^\/+/,'').toLowerCase();
@@ -553,10 +577,128 @@ $('#mv').addEventListener('drop',async e=>{
 });
 
 
+/* ---- saved nodes ---- */
+const SAVED=[];
+try{const j0=JSON.parse(localStorage.getItem('octSavedNodes')||'[]');if(Array.isArray(j0))SAVED.push(...j0)}catch(_){}
+const persist=()=>{try{localStorage.setItem('octSavedNodes',JSON.stringify(SAVED))}catch(_){}};
+const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const note=s=>{$('#status').textContent=s;setTimeout(drawEdges,7000)};
+const catOf=s=>s.cat||'Uncategorized';
+const sk=s=>s.sid||s.id;
+const normCat=v=>v.split('/').map(x=>x.trim()).filter(Boolean).join('/');
+const cats=()=>[...new Set(SAVED.map(catOf))].sort((a,b)=>a.localeCompare(b));
+function fillTpl(){
+  $('#svCats').replaceChildren(...cats().filter(c=>c!=='Uncategorized').map(c=>h('option',{value:c})));
+}
+function buildSaveHtml(list){
+  const L=list||SAVED,data=JSON.stringify(L).replace(/</g,'\\u003c');
+  return '<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><title>SaveNodes</title><style>body{font:14px system-ui,sans-serif;max-width:860px;margin:2rem auto;padding:0 1rem}pre{background:#8881;padding:.6rem;border-radius:6px;overflow:auto}h2{font-size:15px;margin-bottom:0}small{color:#888}</style></head><body>\n<h1>Saved nodes</h1>\n<p>Created by Oct Blueprint Editor. In the editor, open Saved nodes and choose Load SaveNodes.html to reuse these nodes.</p>\n'
+   +[...new Set(L.map(catOf))].sort((a,b)=>a.localeCompare(b)).map(c=>'<h3>'+esc(c)+'</h3>'+L.filter(s=>catOf(s)===c).map(s=>'<section><h2>'+esc(s.name)+'</h2><small>'+esc(s.id)+'</small><pre>'+esc(s.code)+'</pre></section>').join('\n')).join('\n')
+   +'\n<script type="application/json" id="oct-saved-nodes">'+data+'<\/script>\n</body></html>\n';
+}
+async function saveFile(name,text){
+  try{const d=window.claude&&await window.claude.use('downloads');if(d){await d.save({filename:name,data:text});return 'saved'}}catch(e){if(e&&e.code==='declined')return 'declined'}
+  try{const a=h('a',{href:URL.createObjectURL(new Blob([text],{type:name.endsWith('.html')?'text/html':'text/plain'})),download:name});document.body.append(a);a.click();a.remove();return 'fallback'}catch(_){return 'fail'}
+}
+function askOne(n,ex,remaining){
+  return new Promise(res=>{
+    $('#cft').textContent='\u201c'+n.id+'\u201d is already in your saved nodes'+(ex.length>1?' ('+ex.length+' copies)':'')+'. Overwrite it, or save this as a new entry?';
+    $('#cfAll').checked=false;$('#cfAll').parentNode.style.display=remaining>0?'flex':'none';$('#cf').style.display='flex';
+    const done=a=>{$('#cf').style.display='none';res({a,all:$('#cfAll').checked})};
+    $('#cfO').onclick=()=>done('over');$('#cfN').onclick=()=>done('new');$('#cfS').onclick=()=>done('skip');
+  });
+}
+async function saveSel(){
+  const keys=new Set(multi);if(sel)keys.add(sel);const ns=[...keys].map(k=>byKey.get(k)).filter(Boolean);
+  if(!ns.length){note('Select one or more nodes first (Shift-click to select several).');return}
+  const at=Date.now();
+  let nOver=0,nNew=0,nSkip=0,rule=null;
+  for(let q=0;q<ns.length;q++){
+    const n=ns[q],ex=SAVED.filter(s=>s.id===n.id);let act='new';
+    if(ex.length){if(rule)act=rule;else{const r=await askOne(n,ex,ns.length-q-1);act=r.a;if(r.all)rule=r.a}}
+    if(act==='skip'){nSkip++;continue}
+    const base=ex[0],e={id:n.id,name:n.id.split('.').slice(-2).join('.'),code:sNode(n.obj,0),locks:(LOCKS[n.id]||[]).slice(),cat:normCat($('#svCat').value)||(base&&base.cat)||'',at};
+    if(act==='over'){e.sid=base.sid||base.id;e.name=base.name;SAVED[SAVED.indexOf(base)]=e;nOver++}
+    else{e.sid=n.id+'~'+at.toString(36)+q;if(ex.length)e.name+=' ('+(ex.length+1)+')';SAVED.push(e);nNew++}
+  }
+  persist();fillTpl();
+  const c=ns.length+' node'+(ns.length===1?'':'s');
+  note((m=>m.charAt(0).toUpperCase()+m.slice(1))([nNew&&'saved '+nNew+' new',nOver&&'overwrote '+nOver,nSkip&&'skipped '+nSkip].filter(Boolean).join(', '))+'. Use Saved nodes\u2026 to download SaveNodes.html');
+}
+function importSaved(text){
+  try{
+    const d=new DOMParser().parseFromString(text,'text/html').getElementById('oct-saved-nodes'),arr=JSON.parse(d.textContent);let n=0;
+    for(const s of arr){if(!s||!s.id||!s.code)continue;const i=SAVED.findIndex(x=>sk(x)===sk(s));if(i<0){SAVED.push(s);n++}else if((s.at||0)>(SAVED[i].at||0)){SAVED[i]=s;n++}}
+    persist();fillTpl();svList();$('#svSt').textContent='Loaded '+n+' node'+(n===1?'':'s')+' from the file';
+  }catch(e){$('#svSt').textContent='That does not look like a SaveNodes.html file'}
+}
+const SVC=new Set();try{JSON.parse(localStorage.getItem('octSvCollapsed')||'[]').forEach(x=>SVC.add(x))}catch(_){}
+const persistC=()=>{try{localStorage.setItem('octSvCollapsed',JSON.stringify([...SVC]))}catch(_){}};
+function svTree(){
+  const root={n:'',p:'',k:new Map(),it:[]};
+  for(const s of SAVED){const ps=catOf(s).split('/').map(x=>x.trim()).filter(Boolean);let nd=root;
+    ps.forEach((x,i)=>{if(!nd.k.has(x))nd.k.set(x,{n:x,p:ps.slice(0,i+1).join('/'),k:new Map(),it:[]});nd=nd.k.get(x)});nd.it.push(s)}
+  return root;
+}
+const svCnt=nd=>nd.it.length+[...nd.k.values()].reduce((a,c)=>a+svCnt(c),0);
+const svAll=nd=>[...nd.it,...[...nd.k.values()].flatMap(svAll)];
+async function exportSaved(list,label){
+  const fn='SaveNodes'+(label?'_'+label.replace(/[^\w.-]+/g,'_'):'')+'.html';
+  const r=await saveFile(fn,buildSaveHtml(list));let msg;
+  if(r==='saved')msg='Saved '+fn;else if(r==='declined')msg='Save cancelled';
+  else{try{await navigator.clipboard.writeText(buildSaveHtml(list));msg='Download unavailable here; file text copied. Paste it into '+fn}catch(_){msg='Download is not available here'}}
+  $('#svSt').textContent=msg;
+}
+function svNode(nd,L,depth){
+  for(const c of[...nd.k.values()].sort((a,b)=>a.n.localeCompare(b.n))){
+    const open=!SVC.has(c.p);
+    L.append(h('div',{class:'sc',style:'margin-left:'+depth*16+'px',title:c.p,onclick:()=>{if(open)SVC.add(c.p);else SVC.delete(c.p);persistC();svList()}},(open?'\u25be ':'\u25b8 ')+c.n+' ('+svCnt(c)+') ',h('button',{class:'scb',title:'Export all nodes in this category to a file',onclick:e=>{e.stopPropagation();exportSaved(svAll(c),c.p)}},'Export')));
+    if(open){svNode(c,L,depth+1);c.it.forEach(s=>L.append(svItem(s,depth+1)))}
+  }
+}
+function svList(){
+  const L=$('#svl');L.replaceChildren();
+  if(!SAVED.length)L.append(h('div',{class:'legend'},'No saved nodes yet. Select nodes (Shift-click for several) and click \u201cSave nodes\u201d, or load a SaveNodes.html file.'));
+  svNode(svTree(),L,0);
+}
+function svItem(s,depth){
+  return h('div',{class:'si',style:'margin-left:'+depth*16+'px'},
+    h('div',{style:'flex:1;min-width:0'},h('b',{},s.name),h('div',{class:'legend',style:'margin:0'},s.id+' \u00b7 '+new Date(s.at||0).toLocaleString()),h('pre',{},s.code.split('\n').slice(0,6).join('\n'))),
+    (()=>{const i=h('input',{value:s.cat||'',placeholder:'Category',size:12,title:'Category',onchange:e=>{s.cat=normCat(e.target.value);persist();fillTpl();svList()}});i.setAttribute('list','svCats');return i})(),
+    h('button',{title:'Export this node to its own file',onclick:()=>exportSaved([s],s.name)},'Export'),
+    h('button',{onclick:()=>{addTpl('s:'+sk(s));$('#sv').style.display='none'}},'Add to graph'),
+    h('button',{class:'dg',onclick:()=>{SAVED.splice(SAVED.indexOf(s),1);persist();fillTpl();svList()}},'Delete'));
+}
+$('#svSave').onclick=saveSel;
+$('#svOpen').onclick=()=>{$('#svSt').textContent='';svList();$('#sv').style.display='flex'};
+$('#svX').onclick=()=>{$('#sv').style.display='none'};
+$('#svEx').onclick=()=>{SVC.clear();persistC();svList()};
+$('#svCo').onclick=()=>{const w=nd=>{for(const c of nd.k.values()){SVC.add(c.p);w(c)}};w(svTree());persistC();svList()};
+$('#svF').onchange=async e=>{const f=e.target.files[0];if(f)importSaved(await f.text());e.target.value=''};
+$('#svDl').onclick=async()=>{const r=await saveFile('SaveNodes.html',buildSaveHtml());$('#svSt').textContent=r==='saved'?'Saved SaveNodes.html':r==='declined'?'Download cancelled':'Download is not available here; use Copy file text'};
+$('#svCp').onclick=async()=>{
+  const t=buildSaveHtml();
+  try{await navigator.clipboard.writeText(t)}catch(_){const a=h('textarea',{value:t});document.body.append(a);a.select();document.execCommand('copy');a.remove()}
+  $('#svSt').textContent='Copied. Paste it into a file named SaveNodes.html';
+};
+fillTpl();
 vp.addEventListener('input',e=>{const t=e.target,nd=t.closest&&t.closest('.node');if(nd&&t.closest('.tr')){measure(nd.__n);separate();sched()}});
 const cm=h('div',{id:'cm'});document.body.append(cm);
+const NMC=new Set();try{JSON.parse(localStorage.getItem('octMenuCollapsed')||'[]').forEach(x=>NMC.add(x))}catch(_){}
+const persistN=()=>{try{localStorage.setItem('octMenuCollapsed',JSON.stringify([...NMC]))}catch(_){}};
+function renderNodeMenu(p){
+  cm.replaceChildren();
+  const add=k=>{cm.style.display='none';addTpl(k,p||undefined)};
+  const hd=(key,label,depth,count)=>{const open=!NMC.has(key);cm.append(h('div',{class:'ct cg',style:'padding-left:'+(12+depth*14)+'px',onclick:()=>{if(open)NMC.add(key);else NMC.delete(key);persistN();renderNodeMenu(p)}},(open?'\u25be ':'\u25b8 ')+label+' ('+count+')'));return open};
+  if(hd('t:','Templates',0,Object.keys(TPL).length))for(const k of Object.keys(TPL))cm.append(h('div',{class:'ci',style:'padding-left:26px',onclick:()=>add(k)},k));
+  if(SAVED.length){
+    const walk=(nd,depth)=>{for(const c of[...nd.k.values()].sort((a,b)=>a.n.localeCompare(b.n))){
+      if(hd('s:'+c.p,c.n,depth,svCnt(c))){walk(c,depth+1);c.it.forEach(s=>cm.append(h('div',{class:'ci',style:'padding-left:'+(26+depth*14)+'px',title:s.id,onclick:()=>add('s:'+sk(s))},s.name)))}}};
+    if(hd('s:','Saved nodes',0,SAVED.length))walk(svTree(),1);
+  }
+}
 vp.addEventListener('contextmenu',e=>{e.preventDefault();const p=w2(e.clientX,e.clientY);
-  cm.replaceChildren(h('div',{class:'ct'},'Add node'),...Object.keys(TPL).map(k=>h('div',{class:'ci',onclick:()=>{cm.style.display='none';addTpl(k,p)}},k)));
+  renderNodeMenu(p);
   cm.style.left=e.clientX+'px';cm.style.top=e.clientY+'px';cm.style.display='block'});
 addEventListener('pointerdown',e=>{if(!e.target.closest('#cm'))cm.style.display='none'},true);
 addEventListener('keydown',e=>{
