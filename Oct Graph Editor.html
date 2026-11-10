@@ -50,7 +50,8 @@ path.hit{fill:none;stroke:transparent;stroke-width:12;pointer-events:stroke;curs
 .rk{order:8;flex:none;width:16px;height:16px;padding:0;border:0;background:none;font-size:10px;line-height:16px;cursor:pointer;opacity:.55}.rk:hover{opacity:1}.tr .rx{order:9}.tree.lk input:not(.cm),.tree.lk textarea{opacity:.75;cursor:default}
 #mv{position:fixed;inset:0;z-index:45;background:var(--bg);display:none;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
 #mvh{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:8px 10px;border-bottom:1px solid var(--bd)}
-#mvb{flex:1;display:flex;min-height:0}#mvl{width:290px;overflow:auto;border-right:1px solid var(--bd)}
+#mvb{flex:1;display:flex;min-height:0;position:relative}
+#mvp{position:absolute;left:0;top:0;bottom:0;width:min(330px,100%);background:var(--bg);border-right:1px solid var(--bd);display:none;flex-direction:column;padding:8px;z-index:3;box-sizing:border-box}#mvl{width:290px;overflow:auto;border-right:1px solid var(--bd)}
 .mi{padding:6px 10px;cursor:pointer;border-bottom:1px solid var(--bd)}.mi small{display:block;color:var(--mu);font-size:10px;word-break:break-all}.mi.on{background:var(--card)}
 .lb{font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--bd);border-radius:6px;padding:3px 8px;cursor:pointer}.lb:hover{border-color:var(--ac)}
 #sv{position:fixed;inset:0;background:var(--bg);z-index:40;display:none;flex-direction:column;gap:8px;padding:12px;padding-top:calc(12px + env(safe-area-inset-top,0px));overflow:auto}
@@ -102,7 +103,7 @@ path.hit{fill:none;stroke:transparent;stroke-width:12;pointer-events:stroke;curs
 </div>
 <div id="cf"><div id="cfb"><p id="cft" style="margin:0 0 10px"></p><label class="ck" style="margin-bottom:10px"><input type="checkbox" id="cfAll">Apply to all remaining nodes</label><div class="btns" style="margin:0"><button id="cfO">Overwrite</button><button id="cfN">Save as new</button><button id="cfS">Skip</button></div></div></div>
 <div id="sv"><div class="btns" style="align-items:center"><b>Saved nodes</b><label class="lb" for="svF">Load SaveNodes.html…</label><input id="svF" type="file" accept=".html,.htm" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none"><button id="svDl">Download SaveNodes.html</button><button id="svCp">Copy file text</button><button id="svEx">Expand all</button><button id="svCo">Collapse all</button><span id="svSt" class="legend" style="margin:0"></span><button id="svX" style="margin-left:auto">Close</button></div><div id="svl"></div></div>
-<div id="mv"><div id="mvh"><b>Model viewer</b><button id="mvRoot" title="Choose the folder so the viewer can read the files">Browse…</button><input id="mvDir" type="file" webkitdirectory multiple style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none"><select id="mvScope"><option value="sel">Selected node</option><option value="all">Whole document</option></select><select id="mvTex"><option value="auto">Texture: auto</option></select><button id="mvRef">Refresh</button><span id="mvSt" class="legend"></span><button id="mvX" style="margin-left:auto">Close</button></div><div id="mvb"><div id="mvl"></div><div id="mvc"><div id="mvi">Pick a model on the left. Click Browse… and choose your game folder so the files can be found.</div></div></div></div>
+<div id="mv"><div id="mvh"><b>Model viewer</b><button id="mvRoot" title="Choose the folder so the viewer can read the files">Browse…</button><input id="mvDir" type="file" webkitdirectory multiple style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none"><select id="mvScope"><option value="sel">Selected node</option><option value="all">Whole document</option></select><select id="mvTex"><option value="auto">Texture: auto</option></select><button id="mvChg" title="Preview another .fbx from your folder and optionally swap it into the source">Update Node Model</button><button id="mvRef">Refresh</button><span id="mvSt" class="legend"></span><button id="mvX" style="margin-left:auto">Close</button></div><div id="mvb"><div id="mvl"></div><div id="mvc"><div id="mvi">Pick a model on the left. Click Browse… and choose your game folder so the files can be found.</div></div><div id="mvp"><div class="btns" style="align-items:center;margin:0 0 8px"><input id="mvQ" placeholder="Search models…" size="16"><button id="mvApply" title="Write the previewed model’s path into the source">Apply to source</button><button id="mvPX">Close</button></div><div id="mvPS" class="legend" style="margin:0 0 6px"></div><div id="mvpl" style="overflow:auto;flex:1"></div></div></div></div>
 <div id="srcp"><div class="btns"><button id="sApply">Apply as graph</button><button id="sClose">Close</button></div><textarea id="sta" spellcheck="false"></textarea></div>
 <script>
 (()=>{
@@ -469,10 +470,10 @@ $('#sClose').onclick=()=>$('#srcp').style.display='none';
 $('#sApply').onclick=()=>{load($('#sta').value);$('#srcp').style.display='none'};
 $('#save').onclick=async()=>{const r=await saveFile(fname,serAll());if(r!=='saved'){$('#sta').value=serAll();$('#srcp').style.display='flex'}};
 /* ---- model viewer ---- */
-const MV={files:new Map(),root:'',n:0,list:[],cur:null,open:false,lib:false,tc:new Map(),ids:new Map(),t:null};
+const MV={files:new Map(),all:[],root:'',n:0,list:[],cur:null,open:false,lib:false,tc:new Map(),ids:new Map(),t:null};
 const norm=s=>s.replace(/[\u005c]/g,'/').replace(/^\/+/,'').toLowerCase();
 const info=s=>{$('#mvi').textContent=s};
-function addFiles(fl){for(const f of fl){if(!/\.(fbx|png)$/i.test(f.name))continue;const rp=f._rp||f.webkitRelativePath||f.name;if((f._rp||f.webkitRelativePath)&&!MV.root)MV.root=rp.split('/')[0];const p=norm(rp).split('/');for(let i=0;i<p.length;i++){const k=p.slice(i).join('/');if(!MV.files.has(k))MV.files.set(k,f)}MV.n++}}
+function addFiles(fl){for(const f of fl){if(!/\.(fbx|png)$/i.test(f.name))continue;const rp=f._rp||f.webkitRelativePath||f.name;if(/\.fbx$/i.test(f.name))MV.all.push({rel:(f._rp||f.webkitRelativePath)?rp.split('/').slice(1).join('/'):f.name,f});if((f._rp||f.webkitRelativePath)&&!MV.root)MV.root=rp.split('/')[0];const p=norm(rp).split('/');for(let i=0;i<p.length;i++){const k=p.slice(i).join('/');if(!MV.files.has(k))MV.files.set(k,f)}MV.n++}}
 async function readEntry(en,out){
   if(en.isFile){const f=await new Promise((r,j)=>en.file(r,j));f._rp=en.fullPath.replace(/^\/+/,'');out.push(f)}
   else if(en.isDirectory){const rd=en.createReader();for(;;){const b=await new Promise((r,j)=>rd.readEntries(r,j));if(!b.length)break;for(const c of b)await readEntry(c,out)}}
@@ -530,16 +531,16 @@ async function applyTex(){
   c.obj.traverse(o=>{if(!o.isMesh)return;[].concat(o.material).forEach(mt=>{mt.map=alb;mt.normalMap=nrm;if(alb&&mt.color)mt.color.set(0xffffff);mt.side=THREE.DoubleSide;mt.needsUpdate=true})});
   info(MV.base+' \u00b7 '+(alb?'texture applied':v==='none'?'untextured':'no texture found (use Browse… to give access to your game folder)'));
 }
-async function showModel(m){
-  const T=MV.t;if(!T)return;MV.cur={m,obj:null,tx:texturesFor(m)};mvList();
+async function showModel(m,ov){
+  const T=MV.t;if(!T)return;MV.cur={m,ov:ov||null,obj:null,tx:texturesFor(m)};mvList();
   const seen=new Set(),u=MV.cur.tx.filter(t=>!seen.has(t.path)&&seen.add(t.path));
   $('#mvTex').replaceChildren(h('option',{value:'auto'},'Texture: auto'),h('option',{value:'none'},'Texture: none'),...u.map(t=>h('option',{value:t.path},(findFile(t.path)?'\u2713 ':'\u2717 ')+t.path.split('/').pop())));
-  T.grp.clear();const r=await getFile(m.path);
+  T.grp.clear();const r=ov?{f:ov.f}:await getFile(m.path);
   if(!r){info(MV.err||('Not found: '+m.path+' \u2014 use Browse… to give the viewer access to your game folder.'));return}
   info('Loading '+m.name+'\u2026');
   try{const obj=new THREE.FBXLoader().parse(await r.f.arrayBuffer(),'');T.grp.add(obj);frame(obj);MV.cur.obj=obj;let tri=0;
     obj.traverse(o=>{if(o.isMesh)tri+=(o.geometry.index?o.geometry.index.count:o.geometry.attributes.position.count)/3});
-    MV.base=m.name+' \u00b7 '+Math.round(tri)+' triangles';await applyTex()}
+    MV.base=(ov?ov.rel.split('/').pop()+' (preview, source: '+m.name+')':m.name)+' \u00b7 '+Math.round(tri)+' triangles';await applyTex()}
   catch(e){info('Could not read FBX: '+e.message)}
 }
 $('#mvOpen').onclick=async()=>{
@@ -562,9 +563,34 @@ async function restoreDir(){
 function browse(){$('#mvDir').click()}
 $('#mvRoot').onclick=browse;
 $('#mvDir').onchange=e=>{
-  try{const fl=[...e.target.files];MV.files.clear();MV.tc.clear();MV.root='';MV.n=0;addFiles(fl);mvList();if(MV.cur)showModel(MV.cur.m);if(!fl.length)$('#mvSt').textContent='No files were selected.'}
+  try{const fl=[...e.target.files];MV.files.clear();MV.tc.clear();MV.root='';MV.n=0;MV.all=[];addFiles(fl);mvList();if(MV.cur)showModel(MV.cur.m);if(!fl.length)$('#mvSt').textContent='No files were selected.'}
   catch(err){$('#mvSt').textContent='Could not read the folder: '+err.message}
   e.target.value='';
+};
+function mvPick(){
+  const L=$('#mvpl'),q=$('#mvQ').value.trim().toLowerCase();L.replaceChildren();
+  const all=MV.all.filter(x=>!q||x.rel.toLowerCase().includes(q)),cur=MV.cur&&MV.cur.ov&&MV.cur.ov.rel;
+  all.slice(0,400).forEach(x=>L.append(h('div',{class:'mi'+(cur===x.rel?' on':''),onclick:()=>{if(MV.cur){showModel(MV.cur.m,x);mvPick()}}},x.rel.split('/').pop(),h('small',{},'/'+x.rel))));
+  if(all.length>400)L.append(h('div',{class:'mi legend'},'Showing 400 of '+all.length+'. Type to narrow the list.'));
+  if(!all.length)L.append(h('div',{class:'mi'},MV.all.length?'No models match.':'No .fbx files loaded. Use Browse\u2026 to choose your game folder.'));
+  $('#mvPS').textContent=MV.all.length+' models in the folder. Click one to preview it.';
+}
+$('#mvChg').onclick=()=>{if(!MV.cur){info('Pick a model on the left first.');return}$('#mvp').style.display='flex';$('#mvQ').value='';mvPick()};
+$('#mvQ').oninput=mvPick;
+$('#mvPX').onclick=()=>{$('#mvp').style.display='none'};
+$('#mvApply').onclick=()=>{
+  const c=MV.cur;if(!c||!c.ov){$('#mvPS').textContent='Click a model in the list to preview it first.';return}
+  const old=norm(c.m.path),lk=(r,pe)=>{if(LR.has(pe.id))return true;const ps=LOCKS[gv(r,'id')];if(!ps)return false;const pm=pathMap(r).m.get(pe.id);return !!pm&&ps.some(p=>pm===p||pm.startsWith(p+'/'))};
+  let cnt=0,nodesHit=0,skipped=0,first=null;
+  for(const r of roots){if(r.k!=='o')continue;let hit=false;
+    walkAll(r,o=>{const pe=o.e.find(x=>x.key==='path'&&x.v&&x.v.k==='r'&&norm(x.v.t)===old);if(!pe)return;
+      if(lk(r,pe)){skipped++;return}
+      pe.v.t=(/^[\\/]/.test(pe.v.t)?'/':'')+c.ov.rel;if(!first)first=pe.v.t;cnt++;hit=true});
+    if(hit)nodesHit++}
+  if(!cnt){$('#mvPS').textContent=skipped?'Every matching path is locked, so nothing was changed.':'Could not find that model path in the source.';return}
+  c.m.path=first;c.ov=null;
+  rebuild(sel&&byKey.has(sel)?sel:null);mvIdx();mvList();
+  $('#mvPS').textContent='Updated '+cnt+' path'+(cnt===1?'':'s')+' in '+nodesHit+' node'+(nodesHit===1?'':'s')+(skipped?' ('+skipped+' locked, skipped)':'');
 };
 $('#mvScope').onchange=mvList;$('#mvRef').onclick=()=>{mvIdx();mvList()};$('#mvTex').onchange=applyTex;
 $('#mv').addEventListener('dragover',e=>e.preventDefault());
@@ -572,7 +598,7 @@ $('#mv').addEventListener('drop',async e=>{
   e.preventDefault();e.stopPropagation();
   const its=[...e.dataTransfer.items].map(i=>i.webkitGetAsEntry&&i.webkitGetAsEntry()).filter(Boolean);if(!its.length)return;
   $('#mvSt').textContent='Reading dropped folder…';
-  try{const out=[];for(const en of its)await readEntry(en,out);MV.files.clear();MV.tc.clear();MV.root='';MV.n=0;addFiles(out);mvList();if(MV.cur)showModel(MV.cur.m)}
+  try{const out=[];for(const en of its)await readEntry(en,out);MV.files.clear();MV.tc.clear();MV.root='';MV.n=0;MV.all=[];addFiles(out);mvList();if(MV.cur)showModel(MV.cur.m)}
   catch(err){$('#mvSt').textContent='Could not read the dropped folder: '+err.message}
 });
 
