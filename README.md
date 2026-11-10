@@ -6,6 +6,10 @@ It is a single HTML file with no build step and no server. Everything runs local
 
 <img width="1907" height="945" alt="Screenshot 2026-11-09 162635" src="https://github.com/user-attachments/assets/5d4ac1e8-2110-4b57-9d07-65f870682485" />
 
+<img width="1912" height="946" alt="Screenshot 2026-11-10 162224" src="https://github.com/user-attachments/assets/2a4260bd-deba-49f1-9a4d-fde001550db5" />
+
+<img width="1914" height="947" alt="Screenshot 2026-11-10 162054" src="https://github.com/user-attachments/assets/179f173e-745d-42ea-ae7a-b01527366f64" />
+
 ---
 
 ## Features
